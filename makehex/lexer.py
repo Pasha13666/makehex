@@ -2,8 +2,6 @@ import re
 import logging
 import sys
 
-from makehex.tools import debug_point
-
 
 class Token:
     def __init__(self, regexp: str, tag=None):
@@ -21,7 +19,6 @@ class Token:
 
 
 class Tok:
-    @debug_point("Tok")
     def __init__(self, parent, value, line: int):
         self.text = value.group(1)
         self.tag = parent.tag
