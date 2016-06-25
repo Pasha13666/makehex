@@ -1,0 +1,10 @@
+[stdlib.py]
+define=define_hx
+include=include_hx
+execute=execute_hx
+config=config_hx
+set=set_hx
+if=if_hx
+pos=pos_hx
+repeat=repeat_hx
+struct=struct_hx

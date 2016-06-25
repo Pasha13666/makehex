@@ -1,0 +1,53 @@
+#@define ELF_HEADER(.arch .endian .type .machine)
+    7f 'ELF'
+
+    #@if eq(.arch "32")
+        01
+    #@end
+    #@if eq(.arch "64")
+        02
+    #@end
+
+    #@if eq(.endian "LITTLE")
+        01
+    #@end
+    #@if eq(.endian "BIG")
+        02
+    #@end
+
+    01
+
+    #repeat x9(00)
+
+    #@if eq(.type "EDITABLE")
+        0100
+    #@end
+    #@if eq(.type "EXECUTABLE")
+        0200
+    #@end
+    #@if eq(.type "SHARED")
+        0300
+    #@end
+    #@if eq(.type "KERNEL")
+        0400
+    #@end
+
+    #@if eq(.machine "X86")
+        0300
+    #@end
+    #@if eq(.machine "X86_64")
+        3E00
+    #@end
+    #@if eq(.machine "ARM")
+        2800
+    #@end
+
+    01000000
+#@end
+
+#@define ELF_SECTION_HEADER(.name .type .flags .pos .offset .size)
+    #struct uint('4' .name) uint('4' .type)
+    #struct uint('8' .flags) uint('8' .pos) uint('8' .offset) uint('8' .size)
+    #repeat x24(00)
+#@end
+
