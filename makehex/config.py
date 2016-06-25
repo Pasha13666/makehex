@@ -3,7 +3,6 @@ import os
 from logging.handlers import RotatingFileHandler
 from configparser import ConfigParser
 from makehex.globals import Globals
-from makehex.log import DebugLogRecord
 
 
 if os.name == 'posix' or os.name == 'mac':
@@ -34,17 +33,10 @@ def parse_config(name: str):
     parser.read(name if name else _DEFAULTS['config_file'])
     d = parser.defaults()
 
-    def lrf(*args, **kwargs):
-        if args[1] == 1:
-            return DebugLogRecord(*args, **kwargs)
-        return orf(*args, **kwargs)
-
     file_handler = RotatingFileHandler(parser.get('log', 'file', fallback=_DEFAULTS['log_file']), 'a', 1024 * 1024, 5)
     file_handler.setLevel(parser.getint('log', 'level', fallback=3) * 10)
     file_handler.setFormatter(logging.Formatter("[{levelname:^8s}|{asctime}|{module:^10s}:{lineno:>3d}|{funcName:^15}] {message}",
                                                 style='{'))
-    orf = logging.getLogRecordFactory()
-    logging.setLogRecordFactory(lrf)
     logging.root.addHandler(file_handler)
     logging.root.setLevel(0)
 
