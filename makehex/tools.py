@@ -2,19 +2,6 @@ import logging
 from functools import wraps, lru_cache
 
 
-def debug_point(extra='', *args_):
-    def decorator(fn):
-        @wraps(fn)
-        def wrapper(*args, **kwargs):
-            result = fn(*args, **kwargs)
-            logging.log(1, extra, fn, result, args, kwargs, args_)
-            return result
-
-        return wrapper
-
-    return decorator
-
-
 @lru_cache(1024 * 8)
 def import_py_file(name) -> dict:
     logging.debug("Importing py file %s...", name)
@@ -56,7 +43,6 @@ class CB:
         return wrap
 
     @staticmethod
-    @debug_point()
     def typed(*_, string_args=False, cb=True, arg_count=None, need_locals=(), need_globals=(), need_body=False, skip=()):
         if isinstance(need_locals, str):
             need_locals = need_locals,
@@ -68,7 +54,6 @@ class CB:
             skip = skip,
 
         def decorator(fn):
-            @debug_point()
             @wraps(fn)
             def cb_typed_checker(args: dict, out, locals_: dict, globals_: dict, body=None):
                 if need_body:
